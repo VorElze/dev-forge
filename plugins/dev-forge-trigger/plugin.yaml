@@ -1,0 +1,7 @@
+name: dev-forge-trigger
+version: 1.0.0
+description: "Deterministically activates dev-forge for /dev-forge at message start and common website/app build phrases. Injects a short workflow reminder; does not install tools or rewrite tool calls."
+author: VorElze
+requires_hermes: ">=0.21"
+provides_hooks:
+  - pre_llm_call

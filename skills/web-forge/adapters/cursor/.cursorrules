@@ -1,0 +1,22 @@
+# Cursor adapter
+
+Save as `.cursorrules` in the project root (or merge into your existing rules).
+
+```
+Always invoke `web-forge` for website/app build requests. On new visual web pages, load Hallmark + Awwwards if available; for review-only, Jury. If bundled skills are not separately visible to the agent, install/expose them first; never claim a skill was loaded when it was not.
+
+Order:
+1. node <web-forge>/scripts/forge.mjs doctor
+2. node <web-forge>/scripts/forge.mjs new "<name>" --stack <laravel|next|html|api>
+3. Fill docs/BRIEF.md, docs/SPEC.md, docs/PLAN.md.
+4. node <web-forge>/scripts/forge.mjs gate  (require brief/spec/plan PASS)
+5. Build in thin slices, running `gate --url <url>` after each UI change.
+6. Before claiming completion: node <web-forge>/scripts/forge.mjs gate --release --strict
+
+Non-negotiable:
+- SKIP is not PASS; say "not measured".
+- No phase approval without an existing proof file in .forge/ledger.json.
+- Never report an audit result you did not run.
+- Never write source files through a shell pipe (mojibake); use file editing.
+- Report numbers: status codes, counts, widths, contrast, byte sizes.
+```

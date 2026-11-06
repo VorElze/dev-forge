@@ -1,0 +1,22 @@
+{
+  "package": "dev-forge",
+  "version": "0.1.0",
+  "host": "Hermes Agent",
+  "included": [
+    "skills/dev-forge",
+    "skills/web-forge",
+    "plugins/dev-forge-trigger",
+    "scripts/install.sh",
+    "docs"
+  ],
+  "excluded_optional": [
+    "Graphify CLI",
+    "Playwright/browser binaries",
+    "unlicensed or unverified third-party skills",
+    "provider API keys"
+  ],
+  "trigger": [
+    "/dev-forge at message start",
+    "common website/app build phrases"
+  ]
+}

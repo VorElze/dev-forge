@@ -1,0 +1,19 @@
+---
+description: >-
+  Aktifkan pipeline web-forge saat pengguna minta membuat website/aplikasi —
+  "saya ingin membuat website", "saya ingin membuat aplikasi", build me an app, dll.
+alwaysApply: true
+---
+
+# web-forge — build bergated
+
+Jika permintaan pengguna menyebut **membuat website/aplikasi** (ID atau EN), jalankan
+skill **web-forge** — bukan coding langsung.
+
+1. `node <web-forge>/scripts/forge.mjs doctor`
+2. `node <web-forge>/scripts/forge.mjs new "<nama>" --stack …` jika belum ada `.forge/ledger.json`
+3. Isi `docs/BRIEF.md`, `docs/SPEC.md`, `docs/PLAN.md`
+4. `node <web-forge>/scripts/forge.mjs gate` — keluaran mentah ke pengguna
+
+Blokir kode fitur sampai `brief`, `spec`, `plan` PASS. Rilis: `gate --release --strict`.
+Lihat `SKILL.md` dan `AGENTS.md` (cuplikan: `adapters/cursor/AGENTS.snippet.md`).
