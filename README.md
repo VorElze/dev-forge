@@ -7,9 +7,11 @@ Orkestrator pengembangan web/aplikasi berbasis **Hermes Agent**. `dev-forge` men
 - `skills/dev-forge/SKILL.md` — orkestrator dan aturan alur.
 - `skills/web-forge/` — materi web-forge dan tool gate. Menyertakan upstream Awwwards, Jury, Hallmark dengan lisensi/notice mereka (lihat `NOTICE-web-forge.md` dan berkas di `skills/web-forge/third-party/`).
 - `plugins/dev-forge-trigger/` — pemicu deterministik Hermes untuk `/dev-forge` di awal pesan serta frasa build umum.
-- `scripts/install.sh` — pemasang skill dan plugin Hermes.
+- `scripts/install.sh` — pemasang skill dan plugin Hermes (secara bawaan juga menjalankan unduhan skill upstream yang telah diverifikasi; membutuhkan jaringan).
+- `scripts/fetch_optional_skills.sh` — unduhan ulang/penyegaran skill opsional ke `HERMES_SKILLS_DIR` tanpa menyalin seluruh riwayat Git; unduhan toolchain berat bersifat **opt-in**.
+- `optional/skills/awesome-design-md/SKILL.md` — salinan ringan dari referensi skill lokal (bukan seluruh koleksi `design-md/`).
 
-**Tidak termasuk:** semua skill/tool server, Graphify, Playwright/browser, provider key, atau skill pihak ketiga lain yang hanya disebut sebagai integrasi opsional. Installer tidak menginstal semuanya secara diam-diam. Lihat `docs/COMPONENTS.md`.
+**Tidak otomatis menyamai seluruh server produksi:** kunci provider, proyek internal, dan skill tanpa upstream publik yang jelas tidak didownload otomatis. Tooling besar (binari browser Playwright, instalasi Graphify via pip) hanya jika Anda mengaktifkan mode berat. Lihat `docs/COMPONENTS.md`.
 
 ## Instalasi (Hermes Agent)
 
@@ -19,7 +21,17 @@ cd dev-forge
 bash scripts/install.sh
 ```
 
-Restart/reload Hermes. Pastikan folder `~/.hermes/plugins/dev-forge-trigger` terdeteksi/enabled oleh versi Hermes Anda dan `dev-forge` serta `web-forge` terindeks. Auto-discovery plugin berbeda menurut konfigurasi/versi host; jika belum muncul, ikuti dokumentasi plugin Hermes Anda dan aktifkan plugin secara eksplisit.
+Variabel lingkungan (opsional):
+
+```bash
+# lewati unduhan skill tambahan (hanya dev-forge + web-forge + plugin)
+install_fetch_optional=0 bash scripts/install.sh
+
+# sertakan percobaan instalasi Graphify (pip graphifyy) + binari browser Playwright (besar)
+install_with_tools=1 bash scripts/install.sh
+```
+
+Restart/reload Hermes. Pastikan folder `~/.hermes/plugins/dev-forge-trigger` terdeteksi/diaktifkan oleh versi host Anda dan skill baru terindeks. Auto-discovery plugin berbeda menurut konfigurasi/versi host; jika belum muncul, ikuti dokumentasi plugin host Anda.
 
 ## Cara pakai
 
@@ -35,7 +47,7 @@ Alur: pemeriksaan `doctor` → intake → `docs/BRIEF.md` → `docs/SPEC.md` →
 
 ## Opsional
 
-Node.js diperlukan untuk skrip web-forge. Graphify, Playwright CLI dan browser bersifat opsional; pasang terpisah dari sumber resminya. Perintah `graphify hook install` tidak dijalankan oleh installer. Plugin trigger hanya menambahkan konteks prompt; ia tidak menginstal tools, mengubah tool call, atau mengesampingkan kebijakan host.
+Node.js diperlukan untuk skrip web-forge. Secara bawaan installer **tidak** memasang binari browser Playwright atau Graphify; jalankan `FETCH_HEAVY_TOOLS=1 bash scripts/fetch_optional_skills.sh` atau `install_with_tools=1 bash scripts/install.sh` bila Anda ingin mencoba otomatis. `graphify hook install` tetap tidak dijalankan tanpa persetujuan eksplisit di proyek Anda. Plugin trigger hanya menambahkan konteks prompt; ia tidak menginstal tools, mengubah tool call, atau mengesampingkan kebijakan host.
 
 ## Pengembangan & tes
 
@@ -46,4 +58,4 @@ node skills/web-forge/scripts/forge.mjs doctor
 
 ## Lisensi
 
-Kode orisinal paket mengikuti `LICENSE` (MIT). Konten `web-forge` membawa notice upstream. Lisensi pihak ketiga tetap berlaku untuk direktori yang dibundel; cek `NOTICE-web-forge.md`, `NOTICE-juliobsz-skills-LICENSE.txt`, dan `skills/web-forge/third-party/`. `awesome-design-md`, screenshot-to-code, ui-ux-pro-max, avoid-ai-writing, task-observer, serta tool eksternal tidak disalin ke repo ini; instal/redistribusikan hanya setelah memeriksa lisensi upstream masing-masing.
+Kode orisinal paket mengikuti `LICENSE` (MIT). Konten `web-forge` membawa notice upstream. Lisensi pihak ketiga tetap berlaku untuk direktori yang dibundel; cek `NOTICE-web-forge.md`, `NOTICE-juliobsz-skills-LICENSE.txt`, dan `skills/web-forge/third-party/`. Skill yang diunduh oleh skrip instalasi berasal dari repositori upstream masing-masing dan tetap tunduk pada lisensi mereka. `screenshot-to-code` dan `popular-web-designs` tidak memiliki pasangan publik 1:1 yang diverifikasi; sediakan salinan lokal di `DEV_FORGE_LOCAL_SKILLS_DIR` jika Anda ingin menyalinnya.

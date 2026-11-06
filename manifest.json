@@ -1,20 +1,30 @@
 {
   "package": "dev-forge",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "host": "Hermes Agent",
   "included": [
     "skills/dev-forge",
     "skills/web-forge",
     "plugins/dev-forge-trigger",
     "scripts/install.sh",
+    "scripts/fetch_optional_skills.sh",
+    "optional/skills/awesome-design-md/SKILL.md",
     "docs"
   ],
-  "excluded_optional": [
-    "Graphify CLI",
-    "Playwright/browser binaries",
-    "unlicensed or unverified third-party skills",
-    "provider API keys"
+  "install_fetch_default": "runs fetch_optional_skills.sh (network) unless install_fetch_optional=0",
+  "optional_fetched_upstream": [
+    "design-taste-frontend",
+    "awesome-design-md",
+    "web-design-guidelines",
+    "ui-ux-pro-max",
+    "avoid-ai-writing",
+    "task-observer"
   ],
+  "heavy_tools_opt_in": [
+    "Graphify (pip package graphifyy)",
+    "Playwright browser binaries via npx"
+  ],
+  "local_overlay_env": "DEV_FORGE_LOCAL_SKILLS_DIR",
   "trigger": [
     "/dev-forge at message start",
     "common website/app build phrases"

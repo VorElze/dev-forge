@@ -25,11 +25,11 @@ Build web sites and applications through a measured, user-approved pipeline. Thi
 
 ## Optional capabilities
 
-- **Design:** `design-taste-frontend`, `hallmark`, `awwwards`, `jury`, `awesome-design-md` (the last is referenced, not redistributed; check upstream terms before installing).
+- **Design:** `design-taste-frontend`, `hallmark`, `awwwards`, `jury`, `awesome-design-md` (MIT upstream for `design-md/` library; `SKILL.md` is vendored here under `optional/` and copied by `scripts/fetch_optional_skills.sh`).
 - **Image-to-code:** `screenshot-to-code`.
 - **UI research:** `ui-ux-pro-max`, `web-design-guidelines`.
 - **Writing quality:** `avoid-ai-writing` (English-calibrated; do not treat detector signals as proof).
 - **Code map:** `graphify` CLI, optional; use `graphify update .` only with the user's project and permission. The plugin does not silently install Git hooks.
 - **Task instrumentation:** `task-observer` is not a web-build dependency.
 
-Do not claim these are installed merely because they are listed. This public package includes only the `web-forge` integration source and its separately licensed, retained Awwwards/Jury/Hallmark upstream components. Other integrations are referenced by name and require separate installation from their upstreams.
+Do not claim these are installed merely because they are listed. `scripts/install.sh` can fetch verified upstream copies into `HERMES_SKILLS_DIR` when run with network access; heavy tooling (Graphify via `pip install graphifyy`, Playwright browser binaries) is opt-in.

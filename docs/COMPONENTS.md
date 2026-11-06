@@ -1,22 +1,46 @@
 # Inventory and license boundaries
 
-This repository is a portable orchestrator package, not a mirror of the server's complete skill/tool inventory. Only components whose redistribution basis and attribution are retained are included.
+This repository is a portable orchestrator package, not a mirror of a private server snapshot. Components whose redistribution basis is clear are either bundled under `skills/web-forge/` (with NOTICE) or fetched at install time from public upstreams by `scripts/fetch_optional_skills.sh`.
 
-| Capability | Status in this repository | Installation/source |
+## Bundled in-repo (Git)
+
+| Capability | Status | Notes |
 |---|---|---|
 | dev-forge orchestrator | Included | `skills/dev-forge/` |
-| web-forge | Included | `skills/web-forge/`; original MIT with NOTICE |
-| Awwwards and Jury | Included through web-forge | Upstream MIT notice/license retained |
-| Hallmark | Included through web-forge | Upstream MIT LICENSE retained |
+| web-forge | Included | `skills/web-forge/`; MIT + NOTICE |
+| Awwwards + Jury + Hallmark | Included via web-forge | upstream copies retained under `third-party/` |
 | Trigger plugin | Included | `plugins/dev-forge-trigger/` |
-| design-taste-frontend / Taste Skill | Referenced only | https://github.com/Leonxlnx/taste-skill — upstream MIT; install separately |
-| web-design-guidelines | Referenced only | https://github.com/vercel-labs/agent-skills — repository has no license file/API-recognized license; do not redistribute without clarification |
-| awesome-design-md | Referenced only | https://github.com/VoltAgent/awesome-design-md — no repository license detected; do not redistribute without clarification |
-| screenshot-to-code | Referenced only | No verified matching upstream/license for the local copy; not redistributed |
-| ui-ux-pro-max | Referenced only | https://github.com/nextlevelbuilder/ui-ux-pro-max-skill — MIT; install separately and retain license |
-| avoid-ai-writing | Referenced only | Local skill metadata says MIT; upstream is separate, not copied |
-| task-observer | Referenced only | Not a web-build dependency; not copied |
-| Graphify CLI | Not bundled | Install separately; Apache-2.0 upstream, environment-dependent |
-| Playwright CLI / browser | Not bundled | Install separately; browser binaries are not included |
+| awesome-design-md SKILL stub | Included | `optional/skills/awesome-design-md/SKILL.md` (not the full `design-md/` tree) |
 
-This table is a point-in-time inventory, not a warranty of current upstream status. Re-check repository terms before installing or redistributing optional components. No “all tools work 100%” claim is made: optional providers and OS/browser environments vary.
+## Fetched on install (network)
+
+Default `bash scripts/install.sh` runs `scripts/fetch_optional_skills.sh` unless `install_fetch_optional=0`. It shallow-clones upstreams into `~/.cache/dev-forge-upstream` and copies selected subtrees into `HERMES_SKILLS_DIR` (default `~/.hermes/skills`).
+
+| Skill | Upstream | License signal | What is copied |
+|---|---|---|---|
+| design-taste-frontend | https://github.com/Leonxlnx/taste-skill | MIT (API) | `skills/taste-skill` → `design-taste-frontend` |
+| awesome-design-md | https://github.com/VoltAgent/awesome-design-md | MIT (LICENSE file) | `design-md/` + bundled `SKILL.md` from `optional/` |
+| web-design-guidelines | https://github.com/vercel-labs/agent-skills | No SPDX license file in repo root (see upstream README) | unzips `skills/web-design-guidelines.zip` |
+| ui-ux-pro-max | https://github.com/nextlevelbuilder/ui-ux-pro-max-skill | MIT (LICENSE) | `.claude/skills/ui-ux-pro-max` |
+| avoid-ai-writing | https://github.com/salexandr0s/avoid-ai-writing | MIT (LICENSE) | full tree without `.git` |
+| task-observer | https://github.com/VorElze/hermes-office-skills | Collection NOTICE/LICENSE | `skills/task-observer` subset |
+
+Heavy tooling is **not** installed unless `FETCH_HEAVY_TOOLS=1` (or `install_with_tools=1`): attempts `pip install --user graphifyy` and `npx playwright install --with-deps`.
+
+## Local overlay for unverifiable/custom skills
+
+Set `DEV_FORGE_LOCAL_SKILLS_DIR` to a folder that contains any of:
+
+- `screenshot-to-code/`
+- `popular-web-designs/`
+
+Each subdirectory is copied wholesale into `HERMES_SKILLS_DIR` (`.git` stripped). This covers cases where there is **no** verified public 1:1 match for the skill body you use privately.
+
+## Why not "everything, always, automatically"
+
+- **License clarity:** some upstreams lack SPDX-detectable licenses or redistribute large corpora; shipping them blindly risks non-compliance.
+- **Size/runtime:** browser binaries and graph indexes are hundreds of MB; they must stay opt-in.
+- **Host differences:** Hermes/Claude/Codex discovery paths differ; the installer cannot guarantee every client auto-loads every skill.
+- **Secrets and internal-only packs:** production servers may carry keys, cron packs, or forks that are not public.
+
+This table is a point-in-time inventory, not a warranty of current upstream status. Re-check repository terms before installing or redistributing optional components.
